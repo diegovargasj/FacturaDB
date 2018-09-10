@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{% block js %}
+    <link rel="stylesheet"
+          href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/resources/demos/style.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script>
+        $(function () {
+            $("#id_date").datepicker();
+        });
+        $(function () {
+            $("#id_date_cancelled").datepicker();
+        });
+
+        function clean() {
+            document.getElementById("id_amount").value = '';
+            document.getElementById("id_client_rut").value = '';
+            document.getElementById("id_fnum").value = '';
+            document.getElementById("id_date").value = '';
+            document.getElementById("id_date_cancelled").value = '';
+            document.getElementById("id_paid").value = '';
+        }
+    </script>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <form method="post" id="search-form">
+            {% csrf_token %}
+            <div class="container" style="display: block">
+                <p>Monto{{ form.amount }}</p>
+                <p>Rut Cliente{{ form.client_rut }}</p>
+                <p>N° Factura{{ form.fnum }}</p>
+                <p>Fecha Factura{{ form.date }}</p>
+                <p>Fecha Cancelado{{ form.date_cancelled }}</p>
+                <p style="float: right; padding-left: 5px">Ordenar
+                    Por {{ form.order_by }}</p>
+                <p style="float: right;">Cancelado{{ form.paid }}</p>
+            </div>
+            <div class="container" style="display: block">
+                <input type="submit" value="Buscar" style="float: left;">
+                <input type="button" onclick="clean()" value="Limpiar"
+                       style="float: left;">
+            </div>
+        </form>
+    </div>
+
+    <div class="container">
+        <table>
+            <tr>
+                <th>Nombre</th>
+                <th>Rut</th>
+                <th>N°</th>
+                <th>Monto</th>
+                <th>Fecha</th>
+                <th>Cancelado</th>
+            </tr>
+            {% for f in facts %}
+                <tr>
+                    <th>
+                        {{ f.client.name }}
+                    </th>
+                    <th>
+                        {{ f.client.rut }}
+                    </th>
+                    <th>
+                        {{ f.num }}
+                    </th>
+                    <th>
+                        ${{ f.monto }}
+                    </th>
+                    <th>
+                        {{ f.fecha }}
+                    </th>
+                    {% if f.pagada %}
+                        <th>
+                            {{ f.fecha_cancelado }}
+                        </th>
+                    {% else %}
+                        <th>-</th>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+{% endblock %}

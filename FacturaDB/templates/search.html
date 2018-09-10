@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <form method="post" action="">
+        {% csrf_token %}
+        <div class="container">
+            <div class="row">
+                <div class="searchBar">
+                    {{ form.amount }}
+                </div>
+                <div class="searchErrors">
+                    {{ form.amount.errors }}
+                </div>
+                <div class="searchButton">
+                    <button type="submit">Buscar</button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="year">
+                    {{ form.year }}
+                </div>
+                <div class="yearErrors">
+                    {{ form.year.errors }}
+                </div>
+                <div class="month">
+                    {{ form.month }}
+                </div>
+                <div class="monthErrors">
+                    {{ form.month.errors }}
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <div class="container">
+        <div class="results">
+            <table class="results-table">
+                <tr class="heads">
+                    <th>Rut</th>
+                    <th>Razón Social</th>
+                    <th>Número</th>
+                    <th>Fecha</th>
+                    <th>Monto</th>
+                    <th>Cancelar Monto</th>
+                </tr>
+                {% for fact in facturas %}
+                    <tr>
+                        <th class="rut">{{ fact.client.rut }}</th>
+                        <th class="razon-social">{{ fact.client.name }}</th>
+                        <th class="num">{{ fact.num }}</th>
+                        <th class="date">{{ fact.fecha }}</th>
+                        <th class="amount">${{ fact.monto }}</th>
+                        <th>
+                            <button class="cancel-button"
+                                    onclick="cancel('{{ fact.pk }}')">
+                                Cancelar
+                            </button>
+                        </th>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+
+    <form method="post" id="cancel-form">
+        {% csrf_token %}
+        {{ cancelForm }}
+    </form>
+
+{% endblock %}
+
+{% block js %}
+    <script>
+        function cancel(pk) {
+            var f = document.forms['cancel-form'];
+            var amount = document.getElementById('id_amount').value;
+            var year = document.getElementById('id_year').value;
+            var month = document.getElementById('id_month').value;
+            f.getElementsByClassName('pk')[0].value = pk;
+            f.getElementsByClassName('amount')[0].value = amount;
+            f.getElementsByClassName('year')[0].value = year;
+            f.getElementsByClassName('month')[0].value = month;
+            f.submit();
+        }
+    </script>
+{% endblock %}

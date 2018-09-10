@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <form method="post" action="">
+        {% csrf_token %}
+        <div class="container">
+            <div class="row">
+                <div class="searchBar">
+                    {{ form.amount }}
+                </div>
+                <div class="searchErrors">
+                    {{ form.amount.errors }}
+                </div>
+                <div class="searchButton">
+                    <button type="submit">Buscar</button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="year">
+                    {{ form.year }}
+                </div>
+                <div class="yearErrors">
+                    {{ form.year.errors }}
+                </div>
+                <div class="month">
+                    {{ form.month }}
+                </div>
+                <div class="monthErrors">
+                    {{ form.month.errors }}
+                </div>
+            </div>
+        </div>
+    </form>
+    <br>
+    <br>
+    <br>
+    <div class="container">
+        {% for group in groups %}
+            <div class="card">
+                <h4>{{ group.0.client.name }}: {{ group.0.client.rut }}</h4>
+                <form method="post">
+                    {% csrf_token %}
+                    {% for f in group %}
+                        <input name="cancel-pk" type="hidden"
+                                value="{{ f.pk }}">
+                    {% endfor %}
+                    <button class="cancel-button" type="submit">Cancelar Todos
+                    </button>
+                </form>
+                <table>
+                    <tr>
+                        <th>N°</th>
+                        <th>Monto</th>
+                        <th>Fecha</th>
+                    </tr>
+                    {% for f in group %}
+                        <tr>
+                            <th>
+                                {{ f.num }}
+                            </th>
+                            <th>
+                                {{ f.monto }}
+                            </th>
+                            <th>
+                                {{ f.fecha }}
+                            </th>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

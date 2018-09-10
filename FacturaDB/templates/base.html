@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Facturas</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/search.css' %}">
+    {% block css %}
+    {% endblock %}
+</head>
+<body>
+
+<div class="head-menu">
+    <a href="{% url 'search' %}" class="button">Cancelar Facturas</a>
+    <a href="{% url 'search_groups' %}" class="button">Búsqueda Agrupada</a>
+    <a href="{% url 'search_all' %}" class="button">Búsqueda de Facturas</a>
+    <form method="post" action="" style="float: right">
+        {% csrf_token %}
+        <input type="hidden" name="update">
+        <button type="submit">Actualizar Facturas</button>
+    </form>
+</div>
+
+{% block content %}
+{% endblock %}
+
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+{% block js %}
+{% endblock %}
+</html>
