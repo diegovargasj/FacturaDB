@@ -1,0 +1,1030 @@
+;=======================================================================
+;  Brother Scanner Setup File
+;  Copyright (c)  2012 Brother Industries,LTD.
+;  FileName   :   brims12a.inf
+;  Function   :   Scanner(Image)
+;  I/F        :   USB & Network
+;  OS         :   Windows XP / Vista / 7 / 8
+;  Model      :   ADS-2000
+;                 ADS-2100
+;                 ADS-2500W
+;                 ADS-2600W
+;=======================================================================
+[Version]
+Signature="$Windows NT$"
+Class=Image
+ClassGUID={6bdd1fc6-810f-11d0-bec7-08002be2092f}
+Provider=%Provider%
+DriverPackageType=PlugAndPlay
+DriverPackageDisplayName=%DriverPackageDisplayName%
+DriverVer=08/06/2012,01.02.33.33
+CatalogFile=brims12a.cat
+
+[Manufacturer]
+%Manufact%=MODEL,NTx86.5.1.1,NTamd64.5.2.1,NTx86.6.0.1,NTamd64.6.0.1,NTx86.5.1,NTamd64.5.2
+
+[MODEL.NTx86.5.1.1]
+%ADS2500W.NET.SCN%  = ADS2500W.NET.SCN.WXP,  VID_04F9&PID_60A4&NETSCN
+%ADS2600W.NET.SCN%  = ADS2600W.NET.SCN.WXP,  VID_04F9&PID_60A5&NETSCN
+
+%ADS2000.USB.SCN%   = ADS2000.USB.SCN.WXP32,  USB\VID_04F9&PID_60A0&MI_01
+%ADS2100.USB.SCN%   = ADS2100.USB.SCN.WXP32,  USB\VID_04F9&PID_60A1&MI_01
+%ADS2500W.USB.SCN%  = ADS2500W.USB.SCN.WXP32, USB\VID_04F9&PID_60A4&MI_01
+%ADS2600W.USB.SCN%  = ADS2600W.USB.SCN.WXP32, USB\VID_04F9&PID_60A5&MI_01
+
+[MODEL.NTamd64.5.2.1]
+%ADS2500W.NET.SCN%  = ADS2500W.NET.SCN.WXP,  VID_04F9&PID_60A4&NETSCN
+%ADS2600W.NET.SCN%  = ADS2600W.NET.SCN.WXP,  VID_04F9&PID_60A5&NETSCN
+
+%ADS2000.USB.SCN%   = ADS2000.USB.SCN.WXP64,  USB\VID_04F9&PID_60A0&MI_01
+%ADS2100.USB.SCN%   = ADS2100.USB.SCN.WXP64,  USB\VID_04F9&PID_60A1&MI_01
+%ADS2500W.USB.SCN%  = ADS2500W.USB.SCN.WXP64, USB\VID_04F9&PID_60A4&MI_01
+%ADS2600W.USB.SCN%  = ADS2600W.USB.SCN.WXP64, USB\VID_04F9&PID_60A5&MI_01
+
+[MODEL.NTx86.6.0.1]
+%ADS2500W.NET.SCN%  = ADS2500W.NET.SCN,  VID_04F9&PID_60A4&NETSCN
+%ADS2600W.NET.SCN%  = ADS2600W.NET.SCN,  VID_04F9&PID_60A5&NETSCN
+
+%ADS2000.USB.SCN%   = ADS2000.USB.SCN,   USB\VID_04F9&PID_60A0&MI_01
+%ADS2100.USB.SCN%   = ADS2100.USB.SCN,   USB\VID_04F9&PID_60A1&MI_01
+%ADS2500W.USB.SCN%  = ADS2500W.USB.SCN,  USB\VID_04F9&PID_60A4&MI_01
+%ADS2600W.USB.SCN%  = ADS2600W.USB.SCN,  USB\VID_04F9&PID_60A5&MI_01
+
+[MODEL.NTamd64.6.0.1]
+%ADS2500W.NET.SCN%  = ADS2500W.NET.SCN,  VID_04F9&PID_60A4&NETSCN
+%ADS2600W.NET.SCN%  = ADS2600W.NET.SCN,  VID_04F9&PID_60A5&NETSCN
+
+%ADS2000.USB.SCN%   = ADS2000.USB.SCN,   USB\VID_04F9&PID_60A0&MI_01
+%ADS2100.USB.SCN%   = ADS2100.USB.SCN,   USB\VID_04F9&PID_60A1&MI_01
+%ADS2500W.USB.SCN%  = ADS2500W.USB.SCN,  USB\VID_04F9&PID_60A4&MI_01
+%ADS2600W.USB.SCN%  = ADS2600W.USB.SCN,  USB\VID_04F9&PID_60A5&MI_01
+
+[MODEL.NTx86.5.1]
+; XP and later (Server & DomainControler)
+
+[MODEL.NTamd64.5.2]
+; XP and later (Server & DomainControler)
+
+[ControlFlags]
+ExcludeFromSelect=*
+
+;----------------------------------------
+; ADS-2000
+;----------------------------------------
+;----------------------------------------
+; XP32 USB
+;----------------------------------------
+[ADS2000.USB.SCN.WXP32.NT]
+SubClass      = StillImage
+DeviceType    = 1
+DeviceSubType = 0x1
+Capabilities  = 0x39
+PortSelect    = NO
+Events        = BrEvents
+DeviceData    = ADS2000.USB.SCN.WXP32.DeviceData
+AddReg        = BrWia10USB.AddReg,BrModel.ADS.AddReg
+CopyFiles     = BrWia10MiniDrv.CopyFiles,BrScnUsb.CopyFiles,BrTwdsFe.ADS2000U.CopyFiles,BrTwdsMain.CopyFiles,BrTwdsLang.CopyFiles
+ICMProfiles   = "sRGB Color Space Profile.icm"
+
+[ADS2000.USB.SCN.WXP32.NT.Services]
+AddService = BrScnUsb, 0x00000002, BrScnUsb.AddService
+
+[ADS2000.USB.SCN.WXP32.DeviceData]
+Server=local
+UI Class ID={4DB1AD10-3391-11D2-9A33-00C04FA36145}
+TwainDS=%TWAINDS.Prefix%%ADS2000.USB.SCN%
+Model=0-GENERAL
+STIFILE=%StiCoreFileName%
+ModelName=%ADS2000.COINSTALLER.SCN%
+ISISDriverName= ADS2000.pxn
+
+[ADS2000.USB.SCN.WXP32.NT.CoInstallers]
+AddReg=BrCoInstaller_AddReg
+CopyFiles=BrCoInstaller.CopyFiles
+
+;----------------------------------------
+; XP64 USB
+;----------------------------------------
+[ADS2000.USB.SCN.WXP64.NT]
+Include       = sti.inf
+Needs         = STI.USBSection
+SubClass      = StillImage
+DeviceType    = 1
+DeviceSubType = 0x1
+Capabilities  = 0x39
+PortSelect    = NO
+Events        = BrEvents
+DeviceData    = ADS2000.USB.SCN.WXP64.DeviceData
+AddReg        = BrWia10USB.AddReg,BrModel.ADS.AddReg
+CopyFiles     = BrWia10MiniDrv.CopyFiles,BrTwdsFe.ADS2000U.CopyFiles,BrTwdsMain.CopyFiles,BrTwdsLang.CopyFiles
+ICMProfiles   = "sRGB Color Space Profile.icm"
+
+[ADS2000.USB.SCN.WXP64.NT.Services]
+Include = sti.inf
+Needs   = STI.USBSection.Services
+
+[ADS2000.USB.SCN.WXP64.DeviceData]
+Server=local
+UI Class ID={4DB1AD10-3391-11D2-9A33-00C04FA36145}
+TwainDS=%TWAINDS.Prefix%%ADS2000.USB.SCN%
+Model=0-GENERAL
+STIFILE=%StiCoreFileName%
+ModelName=%ADS2000.COINSTALLER.SCN%
+ISISDriverName= ADS2000.pxn
+
+[ADS2000.USB.SCN.WXP64.NT.CoInstallers]
+AddReg=BrCoInstaller_AddReg
+CopyFiles=BrCoInstaller.CopyFiles
+
+;----------------------------------------
+; Vista / 7 USB
+;----------------------------------------
+[ADS2000.USB.SCN.NT]
+Include       = sti.inf
+Needs         = STI.USBSection
+SubClass      = StillImage
+DeviceType    = 1
+DeviceSubType = 0x1
+Capabilities  = 0x39
+PortSelect    = NO
+Events        = BrEvents
+DeviceData    = ADS2000.USB.SCN.DeviceData
+AddReg        = BrWia20USB.AddReg,BrModel.ADS.AddReg
+CopyFiles     = BrWia20MiniDrv.CopyFiles,BrTwdsFe.ADS2000U.CopyFiles,BrTwdsMain.CopyFiles,BrTwdsLang.CopyFiles
+ICMProfiles   = "sRGB Color Space Profile.icm"
+
+[ADS2000.USB.SCN.NT.Services]
+Include = sti.inf
+Needs   = STI.USBSection.Services
+
+[ADS2000.USB.SCN.DeviceData]
+Server=local
+UI Class ID={4DB1AD10-3391-11D2-9A33-00C04FA36145}
+TwainDS=%TWAINDS.Prefix%%ADS2000.USB.SCN%
+Model=0-GENERAL
+STIFILE=%StiCoreFileName%
+ModelName=%ADS2000.COINSTALLER.SCN%
+ChangePaperSize=0
+ISISDriverName= ADS2000.pxn
+
+[ADS2000.USB.SCN.NT.CoInstallers]
+AddReg=BrCoInstaller_AddReg
+CopyFiles=BrCoInstaller.CopyFiles
+
+;----------------------------------------
+; ADS-2100
+;----------------------------------------
+;----------------------------------------
+; XP32 USB
+;----------------------------------------
+[ADS2100.USB.SCN.WXP32.NT]
+SubClass      = StillImage
+DeviceType    = 1
+DeviceSubType = 0x1
+Capabilities  = 0x39
+PortSelect    = NO
+Events        = BrEvents
+DeviceData    = ADS2100.USB.SCN.WXP32.DeviceData
+AddReg        = BrWia10USB.AddReg,BrModel.ADS.AddReg
+CopyFiles     = BrWia10MiniDrv.CopyFiles,BrScnUsb.CopyFiles,BrTwdsFe.ADS2100U.CopyFiles,BrTwdsMain.CopyFiles,BrTwdsLang.CopyFiles
+ICMProfiles   = "sRGB Color Space Profile.icm"
+
+[ADS2100.USB.SCN.WXP32.NT.Services]
+AddService = BrScnUsb, 0x00000002, BrScnUsb.AddService
+
+[ADS2100.USB.SCN.WXP32.DeviceData]
+Server=local
+UI Class ID={4DB1AD10-3391-11D2-9A33-00C04FA36145}
+TwainDS=%TWAINDS.Prefix%%ADS2100.USB.SCN%
+Model=0-GENERAL
+STIFILE=%StiCoreFileName%
+ModelName=%ADS2100.COINSTALLER.SCN%
+ISISDriverName= ADS2000.pxn
+
+[ADS2100.USB.SCN.WXP32.NT.CoInstallers]
+AddReg=BrCoInstaller_AddReg
+CopyFiles=BrCoInstaller.CopyFiles
+
+;----------------------------------------
+; XP64 USB
+;----------------------------------------
+[ADS2100.USB.SCN.WXP64.NT]
+Include       = sti.inf
+Needs         = STI.USBSection
+SubClass      = StillImage
+DeviceType    = 1
+DeviceSubType = 0x1
+Capabilities  = 0x39
+PortSelect    = NO
+Events        = BrEvents
+DeviceData    = ADS2100.USB.SCN.WXP64.DeviceData
+AddReg        = BrWia10USB.AddReg,BrModel.ADS.AddReg
+CopyFiles     = BrWia10MiniDrv.CopyFiles,BrTwdsFe.ADS2100U.CopyFiles,BrTwdsMain.CopyFiles,BrTwdsLang.CopyFiles
+ICMProfiles   = "sRGB Color Space Profile.icm"
+
+[ADS2100.USB.SCN.WXP64.NT.Services]
+Include = sti.inf
+Needs   = STI.USBSection.Services
+
+[ADS2100.USB.SCN.WXP64.DeviceData]
+Server=local
+UI Class ID={4DB1AD10-3391-11D2-9A33-00C04FA36145}
+TwainDS=%TWAINDS.Prefix%%ADS2100.USB.SCN%
+Model=0-GENERAL
+STIFILE=%StiCoreFileName%
+ModelName=%ADS2100.COINSTALLER.SCN%
+ISISDriverName= ADS2000.pxn
+
+[ADS2100.USB.SCN.WXP64.NT.CoInstallers]
+AddReg=BrCoInstaller_AddReg
+CopyFiles=BrCoInstaller.CopyFiles
+
+;----------------------------------------
+; Vista / 7 USB
+;----------------------------------------
+[ADS2100.USB.SCN.NT]
+Include       = sti.inf
+Needs         = STI.USBSection
+SubClass      = StillImage
+DeviceType    = 1
+DeviceSubType = 0x1
+Capabilities  = 0x39
+PortSelect    = NO
+Events        = BrEvents
+DeviceData    = ADS2100.USB.SCN.DeviceData
+AddReg        = BrWia20USB.AddReg,BrModel.ADS.AddReg
+CopyFiles     = BrWia20MiniDrv.CopyFiles,BrTwdsFe.ADS2100U.CopyFiles,BrTwdsMain.CopyFiles,BrTwdsLang.CopyFiles
+ICMProfiles   = "sRGB Color Space Profile.icm"
+
+[ADS2100.USB.SCN.NT.Services]
+Include = sti.inf
+Needs   = STI.USBSection.Services
+
+[ADS2100.USB.SCN.DeviceData]
+Server=local
+UI Class ID={4DB1AD10-3391-11D2-9A33-00C04FA36145}
+TwainDS=%TWAINDS.Prefix%%ADS2100.USB.SCN%
+Model=0-GENERAL
+STIFILE=%StiCoreFileName%
+ModelName=%ADS2100.COINSTALLER.SCN%
+ChangePaperSize=0
+ISISDriverName= ADS2000.pxn
+
+[ADS2100.USB.SCN.NT.CoInstallers]
+AddReg=BrCoInstaller_AddReg
+CopyFiles=BrCoInstaller.CopyFiles
+
+;----------------------------------------
+; ADS-2500W
+;----------------------------------------
+;----------------------------------------
+; XP LAN
+;----------------------------------------
+[ADS2500W.NET.SCN.WXP.NT]
+Include       = sti.inf
+Needs         = STI.SerialSection
+SubClass      = StillImage
+DeviceType    = 1
+DeviceSubType = 0x1
+Capabilities  = 0x39
+PortSelect    = NO
+Events        = BrEvents
+DeviceData    = ADS2500W.NET.SCN.WXP.DeviceData
+AddReg        = BrWia10Net.AddReg,BrWiaNetUi.AddReg,BrModel.ADS.AddReg
+CopyFiles     = BrWia10MiniDrvLAN.CopyFiles,BrTwdsFe.ADS2500WN.CopyFiles,BrTwdsMain.CopyFiles,BrTwdsLang.CopyFiles
+ICMProfiles   = "sRGB Color Space Profile.icm"
+
+[ADS2500W.NET.SCN.WXP.NT.Services]
+Include = sti.inf
+Needs   = STI.SerialSection.Services
+
+[ADS2500W.NET.SCN.WXP.DeviceData]
+Server=local
+UI Class ID={4B29E704-7E5A-466c-A5FD-8BAEC62DC2BA}
+TwainDS=%TWAINDS.Prefix%%ADS2500W.NET.SCN%
+Model=0-GENERAL
+STIFILE=%StiCoreFileNameLAN%
+LISTNAME=%BRNETSEARCH.ADS2500W%
+ISISDriverName= ADS2000.pxn
+
+;----------------------------------------
+; XP32 USB
+;----------------------------------------
+[ADS2500W.USB.SCN.WXP32.NT]
+SubClass      = StillImage
+DeviceType    = 1
+DeviceSubType = 0x1
+Capabilities  = 0x39
+PortSelect    = NO
+Events        = BrEvents
+DeviceData    = ADS2500W.USB.SCN.WXP32.DeviceData
+AddReg        = BrWia10USB.AddReg,BrModel.ADS.AddReg
+CopyFiles     = BrWia10MiniDrv.CopyFiles,BrScnUsb.CopyFiles,BrTwdsFe.ADS2500WU.CopyFiles,BrTwdsMain.CopyFiles,BrTwdsLang.CopyFiles
+ICMProfiles   = "sRGB Color Space Profile.icm"
+
+[ADS2500W.USB.SCN.WXP32.NT.Services]
+AddService = BrScnUsb, 0x00000002, BrScnUsb.AddService
+
+[ADS2500W.USB.SCN.WXP32.DeviceData]
+Server=local
+UI Class ID={4DB1AD10-3391-11D2-9A33-00C04FA36145}
+TwainDS=%TWAINDS.Prefix%%ADS2500W.USB.SCN%
+Model=0-GENERAL
+STIFILE=%StiCoreFileName%
+ModelName=%ADS2500W.COINSTALLER.SCN%
+ISISDriverName= ADS2000.pxn
+
+[ADS2500W.USB.SCN.WXP32.NT.CoInstallers]
+AddReg=BrCoInstaller_AddReg
+CopyFiles=BrCoInstaller.CopyFiles
+
+;----------------------------------------
+; XP64 USB
+;----------------------------------------
+[ADS2500W.USB.SCN.WXP64.NT]
+Include       = sti.inf
+Needs         = STI.USBSection
+SubClass      = StillImage
+DeviceType    = 1
+DeviceSubType = 0x1
+Capabilities  = 0x39
+PortSelect    = NO
+Events        = BrEvents
+DeviceData    = ADS2500W.USB.SCN.WXP64.DeviceData
+AddReg        = BrWia10USB.AddReg,BrModel.ADS.AddReg
+CopyFiles     = BrWia10MiniDrv.CopyFiles,BrTwdsFe.ADS2500WU.CopyFiles,BrTwdsMain.CopyFiles,BrTwdsLang.CopyFiles
+ICMProfiles   = "sRGB Color Space Profile.icm"
+
+[ADS2500W.USB.SCN.WXP64.NT.Services]
+Include = sti.inf
+Needs   = STI.USBSection.Services
+
+[ADS2500W.USB.SCN.WXP64.DeviceData]
+Server=local
+UI Class ID={4DB1AD10-3391-11D2-9A33-00C04FA36145}
+TwainDS=%TWAINDS.Prefix%%ADS2500W.USB.SCN%
+Model=0-GENERAL
+STIFILE=%StiCoreFileName%
+ModelName=%ADS2500W.COINSTALLER.SCN%
+ISISDriverName= ADS2000.pxn
+
+[ADS2500W.USB.SCN.WXP64.NT.CoInstallers]
+AddReg=BrCoInstaller_AddReg
+CopyFiles=BrCoInstaller.CopyFiles
+
+;----------------------------------------
+; Vista  7 LAN
+;----------------------------------------
+[ADS2500W.NET.SCN.NT]
+Include       = sti.inf
+Needs         = STI.SerialSection
+SubClass      = StillImage
+DeviceType    = 1
+DeviceSubType = 0x1
+Capabilities  = 0x39
+PortSelect    = NO
+Events        = BrEvents
+DeviceData    = ADS2500W.NET.SCN.DeviceData
+AddReg        = BrWia20Net.AddReg,BrWiaNetUi.AddReg,BrModel.ADS.AddReg
+CopyFiles     = BrWia20MiniDrvLAN.CopyFiles,BrTwdsFe.ADS2500WN.CopyFiles,BrTwdsMain.CopyFiles,BrTwdsLang.CopyFiles
+ICMProfiles   = "sRGB Color Space Profile.icm"
+
+[ADS2500W.NET.SCN.NT.Services]
+Include = sti.inf
+Needs   = STI.SerialSection.Services
+
+[ADS2500W.NET.SCN.DeviceData]
+Server=local
+UI Class ID={4B29E704-7E5A-466c-A5FD-8BAEC62DC2BA}
+TwainDS=%TWAINDS.Prefix%%ADS2500W.NET.SCN%
+Model=0-GENERAL
+STIFILE=%StiCoreFileNameLAN%
+LISTNAME=%BRNETSEARCH.ADS2500W%
+ChangePaperSize=0
+ISISDriverName= ADS2000.pxn
+
+;----------------------------------------
+; Vista / 7 USB
+;----------------------------------------
+[ADS2500W.USB.SCN.NT]
+Include       = sti.inf
+Needs         = STI.USBSection
+SubClass      = StillImage
+DeviceType    = 1
+DeviceSubType = 0x1
+Capabilities  = 0x39
+PortSelect    = NO
+Events        = BrEvents
+DeviceData    = ADS2500W.USB.SCN.DeviceData
+AddReg        = BrWia20USB.AddReg,BrModel.ADS.AddReg
+CopyFiles     = BrWia20MiniDrv.CopyFiles,BrTwdsFe.ADS2500WU.CopyFiles,BrTwdsMain.CopyFiles,BrTwdsLang.CopyFiles
+ICMProfiles   = "sRGB Color Space Profile.icm"
+
+[ADS2500W.USB.SCN.NT.Services]
+Include = sti.inf
+Needs   = STI.USBSection.Services
+
+[ADS2500W.USB.SCN.DeviceData]
+Server=local
+UI Class ID={4DB1AD10-3391-11D2-9A33-00C04FA36145}
+TwainDS=%TWAINDS.Prefix%%ADS2500W.USB.SCN%
+Model=0-GENERAL
+STIFILE=%StiCoreFileName%
+ModelName=%ADS2500W.COINSTALLER.SCN%
+ChangePaperSize=0
+ISISDriverName= ADS2000.pxn
+
+[ADS2500W.USB.SCN.NT.CoInstallers]
+AddReg=BrCoInstaller_AddReg
+CopyFiles=BrCoInstaller.CopyFiles
+
+;----------------------------------------
+; ADS-2600W
+;----------------------------------------
+;----------------------------------------
+; XP LAN
+;----------------------------------------
+[ADS2600W.NET.SCN.WXP.NT]
+Include       = sti.inf
+Needs         = STI.SerialSection
+SubClass      = StillImage
+DeviceType    = 1
+DeviceSubType = 0x1
+Capabilities  = 0x39
+PortSelect    = NO
+Events        = BrEvents
+DeviceData    = ADS2600W.NET.SCN.WXP.DeviceData
+AddReg        = BrWia10Net.AddReg,BrWiaNetUi.AddReg,BrModel.ADS.AddReg
+CopyFiles     = BrWia10MiniDrvLAN.CopyFiles,BrTwdsFe.ADS2600WN.CopyFiles,BrTwdsMain.CopyFiles,BrTwdsLang.CopyFiles
+ICMProfiles   = "sRGB Color Space Profile.icm"
+
+[ADS2600W.NET.SCN.WXP.NT.Services]
+Include = sti.inf
+Needs   = STI.SerialSection.Services
+
+[ADS2600W.NET.SCN.WXP.DeviceData]
+Server=local
+UI Class ID={4B29E704-7E5A-466c-A5FD-8BAEC62DC2BA}
+TwainDS=%TWAINDS.Prefix%%ADS2600W.NET.SCN%
+Model=0-GENERAL
+STIFILE=%StiCoreFileNameLAN%
+LISTNAME=%BRNETSEARCH.ADS2600W%
+ISISDriverName= ADS2000.pxn
+
+;----------------------------------------
+; XP32 USB
+;----------------------------------------
+[ADS2600W.USB.SCN.WXP32.NT]
+SubClass      = StillImage
+DeviceType    = 1
+DeviceSubType = 0x1
+Capabilities  = 0x39
+PortSelect    = NO
+Events        = BrEvents
+DeviceData    = ADS2600W.USB.SCN.WXP32.DeviceData
+AddReg        = BrWia10USB.AddReg,BrModel.ADS.AddReg
+CopyFiles     = BrWia10MiniDrv.CopyFiles,BrScnUsb.CopyFiles,BrTwdsFe.ADS2600WU.CopyFiles,BrTwdsMain.CopyFiles,BrTwdsLang.CopyFiles
+ICMProfiles   = "sRGB Color Space Profile.icm"
+
+[ADS2600W.USB.SCN.WXP32.NT.Services]
+AddService = BrScnUsb, 0x00000002, BrScnUsb.AddService
+
+[ADS2600W.USB.SCN.WXP32.DeviceData]
+Server=local
+UI Class ID={4DB1AD10-3391-11D2-9A33-00C04FA36145}
+TwainDS=%TWAINDS.Prefix%%ADS2600W.USB.SCN%
+Model=0-GENERAL
+STIFILE=%StiCoreFileName%
+ModelName=%ADS2600W.COINSTALLER.SCN%
+ISISDriverName= ADS2000.pxn
+
+[ADS2600W.USB.SCN.WXP32.NT.CoInstallers]
+AddReg=BrCoInstaller_AddReg
+CopyFiles=BrCoInstaller.CopyFiles
+
+;----------------------------------------
+; XP64 USB
+;----------------------------------------
+[ADS2600W.USB.SCN.WXP64.NT]
+Include       = sti.inf
+Needs         = STI.USBSection
+SubClass      = StillImage
+DeviceType    = 1
+DeviceSubType = 0x1
+Capabilities  = 0x39
+PortSelect    = NO
+Events        = BrEvents
+DeviceData    = ADS2600W.USB.SCN.WXP64.DeviceData
+AddReg        = BrWia10USB.AddReg,BrModel.ADS.AddReg
+CopyFiles     = BrWia10MiniDrv.CopyFiles,BrTwdsFe.ADS2600WU.CopyFiles,BrTwdsMain.CopyFiles,BrTwdsLang.CopyFiles
+ICMProfiles   = "sRGB Color Space Profile.icm"
+
+[ADS2600W.USB.SCN.WXP64.NT.Services]
+Include = sti.inf
+Needs   = STI.USBSection.Services
+
+[ADS2600W.USB.SCN.WXP64.DeviceData]
+Server=local
+UI Class ID={4DB1AD10-3391-11D2-9A33-00C04FA36145}
+TwainDS=%TWAINDS.Prefix%%ADS2600W.USB.SCN%
+Model=0-GENERAL
+STIFILE=%StiCoreFileName%
+ModelName=%ADS2600W.COINSTALLER.SCN%
+ISISDriverName= ADS2000.pxn
+
+[ADS2600W.USB.SCN.WXP64.NT.CoInstallers]
+AddReg=BrCoInstaller_AddReg
+CopyFiles=BrCoInstaller.CopyFiles
+
+;----------------------------------------
+; Vista  7 LAN
+;----------------------------------------
+[ADS2600W.NET.SCN.NT]
+Include       = sti.inf
+Needs         = STI.SerialSection
+SubClass      = StillImage
+DeviceType    = 1
+DeviceSubType = 0x1
+Capabilities  = 0x39
+PortSelect    = NO
+Events        = BrEvents
+DeviceData    = ADS2600W.NET.SCN.DeviceData
+AddReg        = BrWia20Net.AddReg,BrWiaNetUi.AddReg,BrModel.ADS.AddReg
+CopyFiles     = BrWia20MiniDrvLAN.CopyFiles,BrTwdsFe.ADS2600WN.CopyFiles,BrTwdsMain.CopyFiles,BrTwdsLang.CopyFiles
+ICMProfiles   = "sRGB Color Space Profile.icm"
+
+[ADS2600W.NET.SCN.NT.Services]
+Include = sti.inf
+Needs   = STI.SerialSection.Services
+
+[ADS2600W.NET.SCN.DeviceData]
+Server=local
+UI Class ID={4B29E704-7E5A-466c-A5FD-8BAEC62DC2BA}
+TwainDS=%TWAINDS.Prefix%%ADS2600W.NET.SCN%
+Model=0-GENERAL
+STIFILE=%StiCoreFileNameLAN%
+LISTNAME=%BRNETSEARCH.ADS2600W%
+ChangePaperSize=0
+ISISDriverName= ADS2000.pxn
+
+;----------------------------------------
+; Vista / 7 USB
+;----------------------------------------
+[ADS2600W.USB.SCN.NT]
+Include       = sti.inf
+Needs         = STI.USBSection
+SubClass      = StillImage
+DeviceType    = 1
+DeviceSubType = 0x1
+Capabilities  = 0x39
+PortSelect    = NO
+Events        = BrEvents
+DeviceData    = ADS2600W.USB.SCN.DeviceData
+AddReg        = BrWia20USB.AddReg,BrModel.ADS.AddReg
+CopyFiles     = BrWia20MiniDrv.CopyFiles,BrTwdsFe.ADS2600WU.CopyFiles,BrTwdsMain.CopyFiles,BrTwdsLang.CopyFiles
+ICMProfiles   = "sRGB Color Space Profile.icm"
+
+[ADS2600W.USB.SCN.NT.Services]
+Include = sti.inf
+Needs   = STI.USBSection.Services
+
+[ADS2600W.USB.SCN.DeviceData]
+Server=local
+UI Class ID={4DB1AD10-3391-11D2-9A33-00C04FA36145}
+TwainDS=%TWAINDS.Prefix%%ADS2600W.USB.SCN%
+Model=0-GENERAL
+STIFILE=%StiCoreFileName%
+ModelName=%ADS2600W.COINSTALLER.SCN%
+ChangePaperSize=0
+ISISDriverName= ADS2000.pxn
+
+[ADS2600W.USB.SCN.NT.CoInstallers]
+AddReg=BrCoInstaller_AddReg
+CopyFiles=BrCoInstaller.CopyFiles
+
+;----------------------------------------
+; Add reg DeviceData
+;
+[BrModel.ADS.AddReg]
+HKR,DeviceData,ScannerType     ,0x00000,2
+HKR,DeviceData,DocHandling     ,0x00000,1
+HKR,DeviceData,ResoType        ,0x00000,2
+HKR,DeviceData,MaxResoNo       ,0x00000,8
+HKR,DeviceData,MaxResoCatalog  ,0x00000,8
+HKR,DeviceData,OpticalResoX    ,0x00000,600
+HKR,DeviceData,OpticalResoY    ,0x00000,600
+HKR,DeviceData,FeederDocWidth  ,0x00000,8340
+HKR,DeviceData,FeederDocHeight ,0x00000,14000
+HKR,DeviceData,EventImage      ,0x00000,1
+HKR,DeviceData,EventOcr        ,0x00000,1
+HKR,DeviceData,EventEmail      ,0x00000,1
+HKR,DeviceData,EventFile2      ,0x00000,1
+HKR,DeviceData,SetupInit       ,0x00000,1
+HKR,DeviceData,EnCmpJ          ,0x00000,1
+HKR,DeviceData,CmpRate         ,0x00000,2
+HKR,DeviceData,Command-S       ,0x00000,1
+HKR,DeviceData,Command-D       ,0x00000,1
+HKR,DeviceData,Command-K       ,0x00000,1
+HKR,DeviceData,SkeyHandling    ,0x00000,1
+HKR,DeviceData,DuplexScn       ,0x00000,1
+HKR,DeviceData,MultiFeed       ,0x00000,1
+
+;----------------------------------------
+; Add reg NET
+;
+[BrWia10Net.AddReg]
+HKR,,HardwareConfig,1,1
+HKR,,USDClass,,"{20E89B7A-60AE-4aae-9BC9-1D631A59009E}"
+HKR,,CreateFileName,,BRNET
+HKR,DeviceData,OpenTimeout,0x10001,360000
+HKCR,CLSID\{20E89B7A-60AE-4aae-9BC9-1D631A59009E} ,,,%BrWiaUsd%
+HKCR,CLSID\{20E89B7A-60AE-4aae-9BC9-1D631A59009E}\InProcServer32,,,%11%\%Wia10FileName%
+HKCR,CLSID\{20E89B7A-60AE-4aae-9BC9-1D631A59009E}\InProcServer32,ThreadingModel,,"Both"
+
+[BrWia20Net.AddReg]
+HKR,,HardwareConfig,1,1
+HKR,,USDClass,,"{70B9AF53-1E6A-4b04-8AB3-DCDF9290448D}"
+HKR,,CreateFileName,,BRNET
+HKR,DeviceData,OpenTimeout,0x10001,360000
+HKCR,CLSID\{70B9AF53-1E6A-4b04-8AB3-DCDF9290448D} ,,,%BrWiaUsd%
+HKCR,CLSID\{70B9AF53-1E6A-4b04-8AB3-DCDF9290448D}\InProcServer32,,,%11%\%Wia20FileName%
+HKCR,CLSID\{70B9AF53-1E6A-4b04-8AB3-DCDF9290448D}\InProcServer32,ThreadingModel,,"Both"
+
+[BrWiaNetUi.AddReg] ; This entry is needed for UI extension
+HKCR,CLSID\{4B29E704-7E5A-466c-A5FD-8BAEC62DC2BA},,,"WIA Driver UI Extension"
+HKCR,CLSID\{4B29E704-7E5A-466c-A5FD-8BAEC62DC2BA}\shellex\PropertySheetHandlers\{65F642BF-7D2E-4848-96E8-E2B24655E87B}
+HKCR,CLSID\{65F642BF-7D2E-4848-96E8-E2B24655E87B},,,"WIA Property Sheet Handlers"
+HKCR,CLSID\{65F642BF-7D2E-4848-96E8-E2B24655E87B}\InProcServer32,,,%11%\BrWiaNCp.dll
+HKCR,CLSID\{65F642BF-7D2E-4848-96E8-E2B24655E87B}\InProcServer32,ThreadingModel,,"Both"
+
+;----------------------------------------
+; Add reg USB
+;
+[BrWia10USB.AddReg]
+HKR,,HardwareConfig,1,4
+HKR,,USDClass,,"{20E89B7A-60AE-4aae-9BC9-1D631A59009E}"
+HKR,DeviceData,OpenTimeout,0x10001,360000
+HKCR,CLSID\{20E89B7A-60AE-4aae-9BC9-1D631A59009E} ,,,%BrWiaUsd%
+HKCR,CLSID\{20E89B7A-60AE-4aae-9BC9-1D631A59009E}\InProcServer32,,,%11%\%Wia10FileName%
+HKCR,CLSID\{20E89B7A-60AE-4aae-9BC9-1D631A59009E}\InProcServer32,ThreadingModel,,"Both"
+
+[BrWia20USB.AddReg]
+HKR,,HardwareConfig,1,4
+HKR,,USDClass,,"{70B9AF53-1E6A-4b04-8AB3-DCDF9290448D}"
+HKR,DeviceData,OpenTimeout,0x10001,360000
+HKCR,CLSID\{70B9AF53-1E6A-4b04-8AB3-DCDF9290448D} ,,,%BrWiaUsd%
+HKCR,CLSID\{70B9AF53-1E6A-4b04-8AB3-DCDF9290448D}\InProcServer32,,,%11%\%Wia20FileName%
+HKCR,CLSID\{70B9AF53-1E6A-4b04-8AB3-DCDF9290448D}\InProcServer32,ThreadingModel,,"Both"
+
+[BrCoInstaller_AddReg]
+HKR,,CoInstallers32,0x00010000,"BrCiImg.dll,BrImgDrvCoInstaller"
+
+;----------------------------------------
+; Add Service
+;
+[BrScnUsb.AddService]
+DisplayName    = %BrScnUsb.SvcDesc%
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 3                  ; SERVICE_DEMAND_START
+ErrorControl   = 1                  ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %12%\BrScnUsb.sys
+LoadOrderGroup = Base
+
+;----------------------------------------
+; Events
+;
+[BrEvents]
+ScanToOcr   = %ScanToOcr%,{9d095b89-37d6-4877-afed-62a297dc6dbe},*
+ScanToSpApp = %ScanToSpApp%,{a6c5a715-8c6e-11d2-977a-0000f87a926f},*
+ScanToEmail = %ScanToEmail%,{c686dcee-54f2-419e-9a27-2fc7f2e98f9e},*
+ScanToFile  = %ScanToFile%,{fc4767c1-c8b3-48a2-9cfa-2e90cb3d3590},*
+
+;----------------------------------------
+; Copy Files LAN
+;
+[BrWia10MiniDrvLAN.CopyFiles]
+BrWia11d.dll
+BrJDec.dll
+
+[BrWia20MiniDrvLAN.CopyFiles]
+BrWi211d.dll
+BrJDec.dll
+
+;[BrNetWiaCommon32.CopyFiles]
+;BrWiaNCp.dll
+;BrNetSti.dll
+;NSSearch.dll
+;BrMuSNMP.dll
+;Brnsplg.dll
+
+;[BrNetWiaCommon64.CopyFiles]
+;BrWiaNCp.dll
+;BrNetSti.dll
+;NSSRH64.dll
+;BrSNMP64.dll
+;Brnsplg.dll
+
+;----------------------------------------
+; Copy Files USB
+;
+[BrScnUsb.CopyFiles]
+BrScnUsb.sys
+
+[BrWia10MiniDrv.CopyFiles]
+BrWia11d.dll
+BrUsi11d.dll
+BrJDec.dll
+
+[BrWia20MiniDrv.CopyFiles]
+BrWi211d.dll
+BrUsi11d.dll
+BrJDec.dll
+
+[BrCoInstaller.CopyFiles]
+BrCiImg.dll
+
+;----------------------------------------
+; Copy Files
+;
+[BrTwdsMain.CopyFiles]
+BrTwds.dll
+BrTwdsUi.dll
+BrTwdScn.dll
+BrScnDev.dll
+BrStiIf.dll
+BrScnFlt.dll
+BrTwJDec.dll
+
+[BrTwdsLang.CopyFiles]
+BRScnAru.chm
+BRScnBul.chm
+BRScnChn.chm
+BRScnCht.chm
+BRScnCze.chm
+BRScnDan.chm
+BRScnDut.chm
+BRScnEng.chm
+BRScnFin.chm
+BRScnFrc.chm
+BRScnFre.chm
+BRScnGer.chm
+BRScnHun.chm
+BRScnIta.chm
+BRScnJpn.chm
+BRScnKor.chm
+BRScnNor.chm
+BRScnPol.chm
+BRScnPor.chm
+BRScnPtb.chm
+BRScnRom.chm
+BRScnRus.chm
+BRScnSpa.chm
+BRScnSvk.chm
+BRScnSwe.chm
+BRScnTrk.chm
+BRScnUsa.chm
+BrTwdAru.dll
+BrTwdBul.dll
+BrTwdChn.dll
+BrTwdCht.dll
+BrTwdCze.dll
+BrTwdDan.dll
+BrTwdDut.dll
+BrTwdEng.dll
+BrTwdFin.dll
+BrTwdfrc.dll
+BrTwdFre.dll
+BrTwdGer.dll
+BrTwdHun.dll
+BrTwdIta.dll
+BrTwdJpn.dll
+BrTwdKor.dll
+BrTwdNor.dll
+BrTwdPol.dll
+BrTwdPor.dll
+BrTwdPtb.dll
+BrTwdRom.dll
+BrTwdRus.dll
+BrTwdSpa.dll
+BrTwdSvk.dll
+BrTwdSwe.dll
+BrTwdTrk.dll
+BrTwdUsa.dll
+
+[BrTwdsFe.ADS2500WN.CopyFiles]
+BrTwdFe.ds
+TWAD2500WN.ini
+
+[BrTwdsFe.ADS2600WN.CopyFiles]
+BrTwdFe.ds
+TWAD2600WN.ini
+
+[BrTwdsFe.ADS2000U.CopyFiles]
+BrTwdFe.ds
+TWAD2000U.ini
+
+[BrTwdsFe.ADS2100U.CopyFiles]
+BrTwdFe.ds
+TWAD2100U.ini
+
+[BrTwdsFe.ADS2500WU.CopyFiles]
+BrTwdFe.ds
+TWAD2500WU.ini
+
+[BrTwdsFe.ADS2600WU.CopyFiles]
+BrTwdFe.ds
+TWAD2600WU.ini
+
+;----------------------------------------
+; Destination Directories
+;
+[DestinationDirs]
+DefaultDestDir       = 11
+BrScnUsb.CopyFiles   = 12
+BrTwdsMain.CopyFiles = 10,TWAIN_32\%TwainDirName%\Common
+BrTwdsLang.CopyFiles = 10,TWAIN_32\%TwainDirName%\Lang
+
+BrTwdsFe.ADS2500WN.CopyFiles  = 10,TWAIN_32\%TwainDirName%\AD2500WN
+BrTwdsFe.ADS2600WN.CopyFiles  = 10,TWAIN_32\%TwainDirName%\AD2600WN
+
+BrTwdsFe.ADS2000U.CopyFiles  = 10,TWAIN_32\%TwainDirName%\AD2000U
+BrTwdsFe.ADS2100U.CopyFiles  = 10,TWAIN_32\%TwainDirName%\AD2100U
+BrTwdsFe.ADS2500WU.CopyFiles = 10,TWAIN_32\%TwainDirName%\AD2500WU
+BrTwdsFe.ADS2600WU.CopyFiles = 10,TWAIN_32\%TwainDirName%\AD2600WU
+
+;----------------------------------------
+; Source Disks
+;
+[SourceDisksNames]
+1 = %BrDrvDisk1%
+
+[SourceDisksNames.x86]
+3 = %BrDrvDisk1%,,,x86
+
+[SourceDisksNames.amd64]
+4 = %BrDrvDisk1%,,,amd64
+
+[SourceDisksFiles]
+;; System USB
+BrScnUsb.sys = 1,,
+;; StiCore USB
+BrUsi11d.dll = 1,,
+
+;; Twain
+BrTwdFe.ds     = 1,,
+BrTwds.dll     = 1,,
+BrTwdsUi.dll   = 1,,
+BrTwdScn.dll   = 1,,
+BrScnDev.dll   = 1,,
+BrStiIf.dll    = 1,,
+BrScnFlt.dll   = 1,,
+BrTwJDec.dll   = 1,,
+
+;; Twain Lang
+BRScnAru.chm = 1,,
+BRScnBul.chm = 1,,
+BRScnChn.chm = 1,,
+BRScnCht.chm = 1,,
+BRScnCze.chm = 1,,
+BRScnDan.chm = 1,,
+BRScnDut.chm = 1,,
+BRScnEng.chm = 1,,
+BRScnFin.chm = 1,,
+BRScnFrc.chm = 1,,
+BRScnFre.chm = 1,,
+BRScnGer.chm = 1,,
+BRScnHun.chm = 1,,
+BRScnIta.chm = 1,,
+BRScnJpn.chm = 1,,
+BRScnKor.chm = 1,,
+BRScnNor.chm = 1,,
+BRScnPol.chm = 1,,
+BRScnPor.chm = 1,,
+BRScnPtb.chm = 1,,
+BRScnRom.chm = 1,,
+BRScnRus.chm = 1,,
+BRScnSpa.chm = 1,,
+BRScnSvk.chm = 1,,
+BRScnSwe.chm = 1,,
+BRScnTrk.chm = 1,,
+BRScnUsa.chm = 1,,
+BrTwdAru.dll = 1,,
+BrTwdBul.dll = 1,,
+BrTwdChn.dll = 1,,
+BrTwdCht.dll = 1,,
+BrTwdCze.dll = 1,,
+BrTwdDan.dll = 1,,
+BrTwdDut.dll = 1,,
+BrTwdEng.dll = 1,,
+BrTwdFin.dll = 1,,
+BrTwdfrc.dll = 1,,
+BrTwdFre.dll = 1,,
+BrTwdGer.dll = 1,,
+BrTwdHun.dll = 1,,
+BrTwdIta.dll = 1,,
+BrTwdJpn.dll = 1,,
+BrTwdKor.dll = 1,,
+BrTwdNor.dll = 1,,
+BrTwdPol.dll = 1,,
+BrTwdPor.dll = 1,,
+BrTwdPtb.dll = 1,,
+BrTwdRom.dll = 1,,
+BrTwdRus.dll = 1,,
+BrTwdSpa.dll = 1,,
+BrTwdSvk.dll = 1,,
+BrTwdSwe.dll = 1,,
+BrTwdTrk.dll = 1,,
+BrTwdUsa.dll = 1,,
+
+;; Twain Setting
+TWAD2500WN.ini  = 1,,
+TWAD2600WN.ini  = 1,,
+TWAD2000U.ini  = 1,,
+TWAD2100U.ini  = 1,,
+TWAD2500WU.ini  = 1,,
+TWAD2600WU.ini  = 1,,
+
+[SourceDisksFiles.x86]
+;; WIA 1.0
+BrWia11d.dll = 3,,
+;; WIA 2.0
+BrWi211d.dll = 3,,
+;; other
+BrJDec.dll   = 3,,
+;; coinstaller
+BrCiImg.dll  = 3,,
+
+;; StiCore
+;BrnStiCp.cpl = 3,,
+;BrWiaNCp.dll = 3,,
+;BrNetSti.dll = 3,,
+;NSSearch.dll = 3,,
+;BrMuSNMP.dll = 3,,
+;Brnsplg.dll  = 3,,
+
+[SourceDisksFiles.amd64]
+;; WIA 1.0
+BrWia11d.dll = 4,,
+;; WIA 2.0
+BrWi211d.dll = 4,,
+;; other
+BrJDec.dll   = 4,,
+;; StiCore USB
+BrUsi11d.dll = 4,,
+;; Coinstaller USB
+BrCiImg.dll  = 4,,
+
+;; StiCore LAN
+;BrWiaNCp.dll = 4,,
+;BrNetSti.dll = 4,,
+;NSSRH64.dll  = 4,,
+;BrSNMP64.dll = 4,,
+;Brnsplg.dll  = 4,,
+
+;----------------------------------------
+; Localizable Strings
+;
+[Strings]
+Provider = "Brother"
+Manufact = "Brother"
+DriverPackageDisplayName = "ADS-2000,ADS-2100,ADS-2500W,ADS-2600W"
+
+BrDrvDisk1 = "Brother Scanner Driver Disk"
+BrScnUsb.SvcDesc = "Brother USB Still Image driver"
+BrWiaUsd   = "Brother Wia Scanner minidriver"
+
+;; Events
+ScanToOcr   = "Scan To OCR - Button Press"
+ScanToSpApp = "Scan To Image - Button Press"
+ScanToEmail = "Scan To E-mail - Button Press"
+ScanToFile  = "Scan To File - Button Press"
+
+;; 
+TWAINDS.Prefix     = "TW-"          ;; Prefix of Wia Device Name
+StiCoreFileNameLAN = "BrNetSti.dll"	;; STI CORE FILE NAME LAN
+StiCoreFileName    = "BrUsi11d.dll"	;; STI CORE FILE NAME USB
+Wia10FileName      = "BrWia11d.dll"	;; WIA 1.0 FILE NAME
+Wia20FileName      = "BrWi211d.dll"	;; WIA 2.0 FILE NAME
+TwainDirName       = "BrSc11d"      ;; TWAIN Directory Name
+
+;; Device Name (LAN)
+ADS2500W.NET.SCN  = "Brother ADS-2500W LAN"
+ADS2600W.NET.SCN  = "Brother ADS-2600W LAN"
+
+;; Device Name (USB)
+ADS2000.USB.SCN  = "Brother ADS-2000"
+ADS2100.USB.SCN  = "Brother ADS-2100"
+ADS2500W.USB.SCN = "Brother ADS-2500W"
+ADS2600W.USB.SCN = "Brother ADS-2600W"
+
+;; Network Search Name
+BRNETSEARCH.ADS2000  = "ADS-2000"
+BRNETSEARCH.ADS2100  = "ADS-2100"
+BRNETSEARCH.ADS2500W = "ADS-2500W"
+BRNETSEARCH.ADS2600W = "ADS-2600W"
+
+;; Model Name
+ADS2000.COINSTALLER.SCN  = "ADS-2000"
+ADS2100.COINSTALLER.SCN  = "ADS-2100"
+ADS2500W.COINSTALLER.SCN = "ADS-2500W"
+ADS2600W.COINSTALLER.SCN = "ADS-2600W"

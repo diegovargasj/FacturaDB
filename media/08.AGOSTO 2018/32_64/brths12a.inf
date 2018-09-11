@@ -1,0 +1,161 @@
+;=======================================================================
+;  Brother Setup File
+;  Copyright (c)  2012 Brother Industries,LTD.
+;  FileName   :   brths12a.inf
+;  Function   :   Status Port
+;  I/F        :   USB
+;  OS         ;   WindowsXP/x64/Vista/7/8
+;  Model      :   ADS
+;=======================================================================
+
+[Version]
+Signature = "$Windows NT$"
+Class      = Ports
+ClassGUID  = {4d36e978-e325-11ce-bfc1-08002be10318}
+Provider = %ProviderName%
+DriverPackageType=PlugAndPlay
+DriverPackageDisplayName=%DriverPackageDisplayName%
+DriverVer= 09/13/2012, 01.00.00.10
+CatalogFile=brths12a.cat
+
+; ========== Manufacturer/Models sections ===========
+
+[Manufacturer]
+%ProviderName% = PPTDrv_WinUSB,NTx86,NTamd64,NTx86.6.1,NTamd64.6.1
+
+[PPTDrv_WinUSB.NTx86]
+"Brother ADS-2000" =USB_Install, USB\VID_04F9&PID_60A0&MI_00
+"Brother ADS-2100" =USB_Install, USB\VID_04F9&PID_60A1&MI_00
+"Brother ADS-2500W"=USB_Install, USB\VID_04F9&PID_60A4&MI_00
+"Brother ADS-2600W"=USB_Install, USB\VID_04F9&PID_60A5&MI_00
+
+[PPTDrv_WinUSB.NTamd64]
+"Brother ADS-2000" =USB_Install, USB\VID_04F9&PID_60A0&MI_00
+"Brother ADS-2100" =USB_Install, USB\VID_04F9&PID_60A1&MI_00
+"Brother ADS-2500W"=USB_Install, USB\VID_04F9&PID_60A4&MI_00
+"Brother ADS-2600W"=USB_Install, USB\VID_04F9&PID_60A5&MI_00
+
+[PPTDrv_WinUSB.NTx86.6.1]
+"Brother ADS-2000" =USB_Install1009, USB\VID_04F9&PID_60A0&MI_00
+"Brother ADS-2100" =USB_Install1009, USB\VID_04F9&PID_60A1&MI_00
+"Brother ADS-2500W"=USB_Install1009, USB\VID_04F9&PID_60A4&MI_00
+"Brother ADS-2600W"=USB_Install1009, USB\VID_04F9&PID_60A5&MI_00
+
+[PPTDrv_WinUSB.NTamd64.6.1]
+"Brother ADS-2000" =USB_Install1009, USB\VID_04F9&PID_60A0&MI_00
+"Brother ADS-2100" =USB_Install1009, USB\VID_04F9&PID_60A1&MI_00
+"Brother ADS-2500W"=USB_Install1009, USB\VID_04F9&PID_60A4&MI_00
+"Brother ADS-2600W"=USB_Install1009, USB\VID_04F9&PID_60A5&MI_00
+
+; =================== Installation ===================
+
+;[1]
+[USB_Install]
+Include=winusb.inf
+Needs=WINUSB.NT
+AddReg=USB_Install_Reg
+
+;[1']
+[USB_Install1009]
+Include=winusb.inf
+Needs=WINUSB.NT
+AddReg=USB_Install_Reg
+
+[USB_Install_Reg]
+HKR,,PortSubClassOther,1,01
+
+;[2]
+[USB_Install.Services]
+Include=winusb.inf
+AddService=WinUSB,0x00000002,WinUSB_ServiceInstall
+
+[USB_Install1009.Services]
+Include=winusb.inf
+AddService=WinUSB,0x00000002,WinUSB_ServiceInstall
+
+;[3]
+[WinUSB_ServiceInstall]
+DisplayName     = %PPTDrv_SvcDesc%
+ServiceType     = 1
+StartType       = 3
+ErrorControl    = 1
+ServiceBinary   = %12%\WinUSB.sys
+
+;[4]
+[USB_Install.Wdf]
+KmdfService=WINUSB, WinUsb_Install
+
+[USB_Install1009.Wdf]
+KmdfService=WINUSB, WinUsb_Install1009
+
+
+[WinUSB_Install]
+KmdfLibraryVersion=1.5
+
+[WinUSB_Install1009]
+KmdfLibraryVersion=1.9
+
+;[5]
+[USB_Install.HW]
+AddReg=Dev_AddReg
+
+[USB_Install1009.HW]
+AddReg=Dev_AddReg
+
+[Dev_AddReg]
+HKR,,DeviceInterfaceGUIDs,0x10000,"{C88C9CC8-A67A-44d4-9CAC-2A495292A6F6}"
+
+;[6]
+[USB_Install.CoInstallers]
+AddReg=CoInstallers_AddReg
+CopyFiles=CoInstallers_CopyFiles
+
+[USB_Install1009.CoInstallers]
+AddReg=CoInstallers1009_AddReg
+CopyFiles=CoInstallers1009_CopyFiles
+
+
+[CoInstallers_AddReg]
+HKR,,CoInstallers32,0x00010000,"WdfCoInstaller01005.dll,WdfCoInstaller","WinUSBCoInstaller.dll"
+
+[CoInstallers_CopyFiles]
+WinUSBCoInstaller.dll
+WdfCoInstaller01005.dll
+
+[CoInstallers1009_AddReg]
+HKR,,CoInstallers32,0x00010000,"WdfCoInstaller01009.dll","WdfCoInstaller","WinUSBCoInstaller2.dll"
+
+[CoInstallers1009_CopyFiles]
+WinUSBCoInstaller2.dll
+WdfCoInstaller01009.dll
+
+[DestinationDirs]
+CoInstallers_CopyFiles=11
+
+; ================= Source Media Section =====================
+;[7]
+
+[SourceDisksNames]
+1 = %DISK_NAME%,,,\x86
+2 = %DISK_NAME%,,,\amd64
+
+[SourceDisksFiles.x86]
+WinUSBCoInstaller.dll=1
+WdfCoInstaller01005.dll=1
+WinUSBCoInstaller2.dll=1
+WdfCoInstaller01009.dll=1
+
+[SourceDisksFiles.amd64]
+WinUSBCoInstaller.dll=2
+WdfCoInstaller01005.dll=2
+WinUSBCoInstaller2.dll=2
+WdfCoInstaller01009.dll=2
+
+
+; =================== Strings ===================
+
+[Strings]
+ProviderName="Brother"
+PPTDrv_SvcDesc="PPT Driver(WinUSB)"
+DISK_NAME="Install Disk"
+DriverPackageDisplayName="Brother ADS-2000,ADS-2100,ADS-2500W,ADS-2600W"

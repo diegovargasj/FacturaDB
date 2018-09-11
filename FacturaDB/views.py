@@ -12,7 +12,7 @@ from PyPDF2 import PdfFileReader
 from multiprocessing import Process
 
 updating = False
-paid_dir = 'pagado'
+paid_dir = 'PAGADAS'
 
 
 def search(request):
@@ -36,7 +36,7 @@ def search(request):
 					pk = cancelForm.cleaned_data['pk']
 					f = Factura.objects.get(pk=pk)
 					cancelInvoice(f)
-					make_payment_bill(os.path.join(f.path, paid_dir), [f.num])
+					make_payment_bill(os.path.join(f.path, paid_dir), [f.num], cancelForm.cleaned_data['date'])
 					if cancelForm.cleaned_data['amount']:
 						amount = int(
 							form.cleaned_data['amount'].replace(".", ""))
@@ -60,9 +60,9 @@ def search(request):
 	return HttpResponse(template.render(context, request))
 
 
-def cancelInvoice(invoice):
+def cancelInvoice(invoice, date):
 	invoice.pagada = True
-	invoice.fecha_cancelado = datetime.datetime.now()
+	invoice.fecha_cancelado = date
 	path = invoice.path
 	file = invoice.file
 	new_dir = os.path.join(path, paid_dir)
@@ -74,15 +74,19 @@ def cancelInvoice(invoice):
 	invoice.save()
 
 
-def make_payment_bill(dir, nums):
+def make_payment_bill(dir, nums, date):
 	name = ""
 	name += nums[0]
 	if len(nums) > 1:
 		for num in nums[1:]:
 			name += ", " + num
 
-	file = open(os.path.join(dir, name + ".msg"), "w+")
-	# file.write("{}, {}, {}, {}".format())
+	file = open(os.path.join(dir, name + ".txt"), "w+")
+	amount = 0
+	for num in nums:
+		amount += Factura.objects.get(num=num).monto
+
+	file.write("monto: {}, fecha: {}".format(amount, date))
 	file.close()
 
 
@@ -96,12 +100,12 @@ def search_accum(request):
 			nums = []
 			for pk in request.POST.getlist('cancel-pk'):
 				f = Factura.objects.get(pk=pk)
-				cancelInvoice(f)
+				cancelInvoice(f, request.POST['date'])
 				nums.append(f.num)
 
 			make_payment_bill(
 				os.path.join(request.POST.getlist('cancel-pk')[0].path,
-				             paid_dir), nums)
+				             paid_dir), nums, request.POST['date'])
 
 		if 'update' in request.POST and not updating:
 			updatin = True
@@ -154,6 +158,14 @@ def get_group(facts, i):
 def update(root=''):
 	new_dir = os.path.join(MEDIA_ROOT, root)
 	for dir in os.listdir(new_dir):
+		null_dir_list = ['OSORNO', 'anuladas', '00.2014',
+				'00.2015', '00.2016', '00.2017', 'Thumbs.db',
+				'install', '32_64']
+		extn = dir.split('.')[-1]
+		if dir in null_dir_list or extn == 'msg' \
+		or extn == 'bmp' or extn == 'xlsx':
+			continue
+
 		if dir[-4:] == '.pdf':
 			add_to_db(new_dir, dir, False)
 
@@ -165,6 +177,7 @@ def update(root=''):
 
 
 def add_paid(path):
+	path = os.path.join(path, paid_dir)
 	model_list = Factura.objects.filter(path__startswith=path).values_list(
 		'file', flat=True)
 	fact_list = os.listdir(path)
@@ -174,96 +187,111 @@ def add_paid(path):
 
 
 def add_to_db(path, fact, paid):
-	pdf = PdfFileReader(open(path + '/' + fact, 'rb'))
-	page = pdf.getPage(0)
-	text = page.extractText()
+	model_list = Factura.objects.filter(path__startswith=path).values_list(
+		'file', flat=True)
+	if fact in model_list:
+		return
+        
+	rut = None
+	try:
+		pdf = PdfFileReader(open(path + '/' + fact, 'rb'))
+		page = pdf.getPage(0)
+		text = page.extractText()
 
-	totalTag = 'TOTAL$'
-	totalPos = text.find(totalTag)
-	if totalPos == -1:
-		totalTag = 'MontoTotal$\n'
+		totalTag = 'TOTAL$'
 		totalPos = text.find(totalTag)
+		if totalPos == -1:
+			totalTag = 'MontoTotal$\n'
+			totalPos = text.find(totalTag)
 
-	totalPos += len(totalTag)
-	totalEnd = text[totalPos:totalPos + 20].find('\n') + totalPos
-	if totalEnd == totalPos - 1:
-		totalEnd = len(text)
+		totalPos += len(totalTag)
+		totalEnd = text[totalPos:totalPos + 20].find('\n') + totalPos
+		if totalEnd == totalPos - 1:
+			totalEnd = len(text)
 
-	amount = int(text[totalPos:totalEnd].replace('.', ''))
+		amount = int(text[totalPos:totalEnd].replace('.', ''))
 
-	numTag = 'FACTURAELECTRONICA\nN°'
-	numPos = text.find(numTag) + len(numTag)
-	numEnd = text[numPos:numPos + 25].find('\n') + numPos
-	if numPos == len(numTag) - 1:
-		numTag = 'ELECTRONICANº'
+		numTag = 'FACTURAELECTRONICA\nN°'
 		numPos = text.find(numTag) + len(numTag)
-		numEnd = text[numPos:numPos + 25].find('S.') + numPos
+		numEnd = text[numPos:numPos + 25].find('\n') + numPos
+		if numPos == len(numTag) - 1:
+			numTag = 'ELECTRONICANº'
+			numPos = text.find(numTag) + len(numTag)
+			numEnd = text[numPos:numPos + 25].find('S.') + numPos
 
-	num = text[numPos:numEnd]
-	clientTag = 'RUT:'
-	clientPos = text.find(clientTag) + len(clientTag)
-	if clientPos == len(clientTag) - 1:
-		clientTag = 'R.U.T.:'
+		num = text[numPos:numEnd]
+		clientTag = 'RUT:'
 		clientPos = text.find(clientTag) + len(clientTag)
-		clientEnd = text[clientPos:].find('-') + 3 + clientPos
+		if clientPos == len(clientTag) - 1:
+			clientTag = 'R.U.T.:'
+			clientPos = text.find(clientTag) + len(clientTag)
+			clientEnd = text[clientPos:].find('-') + 3 + clientPos
 
-	else:
-		clientEnd = text[clientPos:clientPos + 25].find('\n') + clientPos
+		else:
+			clientEnd = text[clientPos:clientPos + 25].find('\n') + clientPos
 
-	clientRut = text[clientPos:clientEnd].replace(".", "").replace(' ', '')
+		clientRut = text[clientPos:clientEnd].replace(".", "").replace(' ', '')
 
-	dateTag = 'Fecha:'
-	dayPos = text.find(dateTag) + len(dateTag)
-	if dayPos == len(dateTag) - 1:
-		dateTag = 'Fecha Emision:'
+		dateTag = 'Fecha:'
 		dayPos = text.find(dateTag) + len(dateTag)
-		dayEnd = text[dayPos:dayPos + 30].find(' de ') + dayPos
-		monthPos = dayEnd + 4
-		monthEnd = text[monthPos:monthPos + 15].find(' del ') + monthPos
-		yearPos = monthEnd + 5
-		yearEnd = yearPos + 4
+		if dayPos == len(dateTag) - 1:
+			dateTag = 'Fecha Emision:'
+			dayPos = text.find(dateTag) + len(dateTag)
+			dayEnd = text[dayPos:dayPos + 30].find(' de ') + dayPos
+			monthPos = dayEnd + 4
+			monthEnd = text[monthPos:monthPos + 15].find(' del ') + monthPos
+			yearPos = monthEnd + 5
+			yearEnd = yearPos + 4
 
-	else:
-		dayEnd = text[dayPos:dayPos + 30].find('de') + dayPos
-		monthPos = dayEnd + 2
-		monthEnd = text[monthPos:monthPos + 15].find('de') + monthPos
-		yearPos = monthEnd + 2
-		yearEnd = yearPos + 4
+		else:
+			dayEnd = text[dayPos:dayPos + 30].find('de') + dayPos
+			monthPos = dayEnd + 2
+			monthEnd = text[monthPos:monthPos + 15].find('de') + monthPos
+			yearPos = monthEnd + 2
+			yearEnd = yearPos + 4
 
-	day = int(text[dayPos:dayEnd])
-	month = text[monthPos:monthEnd]
-	year = int(text[yearPos:yearEnd])
+		day = int(text[dayPos:dayEnd])
+		month = text[monthPos:monthEnd]
+		year = int(text[yearPos:yearEnd])
 
-	monthConverter = {
-		'Enero': 1,
-		'Febrero': 2,
-		'Marzo': 3,
-		'Abril': 4,
-		'Mayo': 5,
-		'Junio': 6,
-		'Julio': 7,
-		'Agosto': 8,
-		'Septiembre': 9,
-		'Octubre': 10,
-		'Noviembre': 11,
-		'Diciembre': 12
-	}
+		monthConverter = {
+			'Enero': 1,
+			'Febrero': 2,
+			'Marzo': 3,
+			'Abril': 4,
+			'Mayo': 5,
+			'Junio': 6,
+			'Julio': 7,
+			'Agosto': 8,
+			'Septiembre': 9,
+			'Octubre': 10,
+			'Noviembre': 11,
+			'Diciembre': 12
+		}
 
-	monthNum = monthConverter[month]
-	date = datetime.datetime(year, monthNum, day)
-	newFact = Factura(num=num)
-	newFact.path = path
-	newFact.fecha = date
-	newFact.file = fact
-	newFact.monto = amount
-	newFact.fecha_cancelado = datetime.datetime.now()
-	newFact.pagada = paid
-	dig, ver = clientRut.split("-")
-	rut = Rut(dig, ver)
+		monthNum = monthConverter[month]
+		date = datetime.datetime(year, monthNum, day)
+		newFact = Factura(num=num)
+		newFact.path = path
+		newFact.fecha = date
+		newFact.file = fact
+		newFact.monto = amount
+		newFact.fecha_cancelado = datetime.datetime.now()
+		newFact.pagada = paid
+		dig, ver = clientRut.split("-")
+		rut = Rut(dig, ver)
+
+	except:
+		print("error with file {}, dir {}".format(fact, path))
+
 	try:
 		newFact.client = Client.objects.get(rut__digits=rut.digits)
 
 	except:
+		if rut is None:
+			print("error with file {}, dir {}".format(fact, path))
+			return
+
 		rut.save()
 		newClient = Client(rut=rut)
 		rsTag = 'RazónSocial:'
@@ -279,7 +307,12 @@ def add_to_db(path, fact, paid):
 		newClient.save()
 		newFact.client = newClient
 
-	newFact.save()
+	try:
+		newFact.save()
+		print("{}, {}, {}".format(newFact.rut, newFact.num, newFact.monto))
+
+	except:
+		pass
 
 
 def search_all(request):
@@ -289,13 +322,13 @@ def search_all(request):
 	facts = Factura.objects.all()
 	context = {}
 	if request.method == "POST":
+		if 'update' in request.POST and not updating:
+			updatin = True
+			update()
+			updating = False
+
 		form = SearchAllForm(request.POST)
 		if form.is_valid():
-			if 'update' in request.POST and not updating:
-				updatin = True
-				update()
-				updating = False
-
 			if form.cleaned_data['amount']:
 				try:
 					facts = facts.filter(monto=form.cleaned_data['amount']

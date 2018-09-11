@@ -1,0 +1,131 @@
+;=======================================================================
+;  Brother MFC Setup File
+;  Copyright (c)  2012 Brother Industries,LTD.
+;  FileName   :   brpos12a.inf
+;  Function   :   Ports
+;  I/F        :   USB
+;  OS         :   Windows XP/Vista/7/8
+;  Model      :   s12a
+;=======================================================================
+[Version]
+Signature  = "$Windows NT$"
+Class      = Ports
+ClassGUID  = {4d36e978-e325-11ce-bfc1-08002be10318}
+Provider   = %Provider%
+DriverPackageType=PlugAndPlay
+DriverPackageDisplayName=%DriverPackageDisplayName%
+DriverVer= 09/11/2012, 01.01.03.03
+CatalogFile= brpos12a.cat
+
+[Manufacturer]
+%Manufact% = MFC_SER, NTx86,NTamd64
+
+[ControlFlags]
+ExcludeFromSelect=*
+
+[MFC_SER]
+"Brother ADS-2000 Remote Setup Port" = BROTHER.USB.SERIAL, USB\VID_04F9&PID_60A0&MI_02
+"Brother ADS-2100 Remote Setup Port" = BROTHER.USB.SERIAL, USB\VID_04F9&PID_60A1&MI_02
+"Brother ADS-2500W Remote Setup Port" = BROTHER.USB.SERIAL, USB\VID_04F9&PID_60A4&MI_02
+"Brother ADS-2600W Remote Setup Port" = BROTHER.USB.SERIAL, USB\VID_04F9&PID_60A5&MI_02
+
+[MFC_SER.NTx86]
+"Brother ADS-2000 Remote Setup Port" = BROTHER.USB.SERIAL, USB\VID_04F9&PID_60A0&MI_02
+"Brother ADS-2100 Remote Setup Port" = BROTHER.USB.SERIAL, USB\VID_04F9&PID_60A1&MI_02
+"Brother ADS-2500W Remote Setup Port" = BROTHER.USB.SERIAL, USB\VID_04F9&PID_60A4&MI_02
+"Brother ADS-2600W Remote Setup Port" = BROTHER.USB.SERIAL, USB\VID_04F9&PID_60A5&MI_02
+
+[MFC_SER.NTamd64]
+"Brother ADS-2000 Remote Setup Port" = BROTHER.USB.SERIAL, USB\VID_04F9&PID_60A0&MI_02
+"Brother ADS-2100 Remote Setup Port" = BROTHER.USB.SERIAL, USB\VID_04F9&PID_60A1&MI_02
+"Brother ADS-2500W Remote Setup Port" = BROTHER.USB.SERIAL, USB\VID_04F9&PID_60A4&MI_02
+"Brother ADS-2600W Remote Setup Port" = BROTHER.USB.SERIAL, USB\VID_04F9&PID_60A5&MI_02
+
+[BROTHER.USB.SERIAL]
+CopyFiles=BROTHER.USB.SERIAL.CopyFiles
+PreFixLength=8
+PostFixLength=18
+
+[BROTHER.USB.SERIAL.Services]
+Addservice = BrSerIb , 0x00000002, BrSerIb.AddService
+Addservice = BrUsbSIb, 0x00000000, BrUsbSIb.AddService
+
+[BROTHER.USB.SERIAL.HW]
+AddReg=BROTHER.USB.SERIAL.AddReg.HW
+
+[BROTHER.USB.SERIAL.CopyFiles]
+BrSerIb.sys
+BrUsbSib.sys
+
+[BROTHER.USB.SERIAL.CoInstallers]
+AddReg=BrCoInstaller_AddReg
+CopyFiles=BrCoInstaller.CopyFiles
+
+;-------------------------------------------------------------------------------
+; Lower Filter Driver 
+;
+[BROTHER.USB.SERIAL.AddReg.HW]
+HKR,,"LowerFilters", 0x00010000, "BrUsbSIb"
+
+;--------------------------------------------------
+; Add Service
+;
+[BrSerIb.AddService]
+DisplayName    = %BrSerIb.SvcDesc%
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 3                  ; SERVICE_DEMAND_START
+ErrorControl   = 1                  ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %12%\BrSerIb.sys
+
+[BrUsbSIb.AddService]
+DisplayName    = %BrUsbSIb.SvcDesc%
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 3                  ; SERVICE_DEMAND_START
+ErrorControl   = 1                  ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %12%\BrUsbSIb.sys
+
+;----------------------------------------
+; CoInstaller
+;
+[BrCoInstaller.CopyFiles]
+brciser.dll
+
+[BrCoInstaller_AddReg]
+HKR,,CoInstallers32,0x00010000,"brciser.dll,BrmfcSerCoInstaller"
+
+;----------------------------------------------------------------------
+
+[DestinationDirs]
+DefaultDestDir = 12
+BrCoInstaller.CopyFiles = 11
+
+[SourceDisksNames]
+1 = %BrDrvDisk1%
+
+[SourceDisksNames.x86]
+2 = %BrDrvDisk1%,,,x86
+
+[SourceDisksNames.amd64]
+3 = %BrDrvDisk1%,,,amd64
+
+[SourceDisksFiles]
+
+[SourceDisksFiles.x86]
+BrSerIb.sys=2
+BrUsbSib.sys=2
+brciser.dll=2
+
+[SourceDisksFiles.amd64]
+BrSerIb.sys=3
+BrUsbSib.sys=3
+brciser.dll=3
+
+[Strings]
+Manufact = "Brother"
+Provider = "Brother"
+DriverPackageDisplayName="ADS-2000,ADS-2100,ADS-2500W,ADS-2600W"
+
+BrDrvDisk1 = "Brother Driver Disk"
+
+BrSerIb.SvcDesc = "Brother Serial Interface Driver(WDM)"
+BrUsbSIb.SvcDesc = "Brother Serial USB Driver(WDM)"
