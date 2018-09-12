@@ -42,10 +42,11 @@
                     {% csrf_token %}
                     {% for f in group %}
                         <input name="cancel-pk" type="hidden"
-                                value="{{ f.pk }}">
+                               value="{{ f.pk }}">
                     {% endfor %}
-                    <button class="cancel-button" type="submit">Cancelar Todos
-                    </button>
+                    <input type="text" id="cancel_date" name="cancel_date"
+                           placeholder="Fecha Cancelación" readonly required>
+                    <input type="submit" value="Cancelar Todos" class="cancel-button">
                 </form>
                 <table>
                     <tr>

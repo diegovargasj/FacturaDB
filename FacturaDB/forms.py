@@ -31,8 +31,8 @@ class CancelForm(forms.Form):
 		attrs={'name': 'year', 'class': 'year', 'value': ''}), required=False)
 	month = forms.IntegerField(widget=forms.HiddenInput(
 		attrs={'name': 'month', 'class': 'month', 'value': ''}), required=False)
-	date = forms.DateField(widget=forms.TextInput(
-							attrs={'readonly':True})
+	cancel_date = forms.DateField(widget=forms.HiddenInput(
+		attrs={'name': 'cancel_date', 'class': 'cancel_date', 'value': ''}))
 
 
 class SearchAllForm(forms.Form):
@@ -59,4 +59,5 @@ class SearchAllForm(forms.Form):
 	           ('client__rut', 'Rut'), ('num', 'N°'),
 	           ('monto', 'Monto'), ('fecha', 'Fecha'))
 	order_by = forms.CharField(widget=forms.Select(choices=CHOICES,
-	                            attrs={'onchange': 'this.form.submit()'}))
+	                                               attrs={
+		                                               'onchange': 'this.form.submit()'}))

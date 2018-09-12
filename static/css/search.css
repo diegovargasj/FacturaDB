@@ -92,6 +92,7 @@ button {
     text-decoration: none;
     display: block;
     font-size: 16px;
+    padding: 8px 16px;
     cursor: pointer;
     vertical-align: top;
     width: 100%;
@@ -128,4 +129,18 @@ input[type=number] {
     display: block;
     float: left;
     width: 100%;
+}
+
+.popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: none;
+    width: 300px;
+    height: 100px;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: whitesmoke;
+    box-shadow: 3px 3px grey;
 }

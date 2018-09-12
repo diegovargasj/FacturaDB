@@ -52,7 +52,7 @@
                         <th class="amount">${{ fact.monto }}</th>
                         <th>
                             <button class="cancel-button"
-                                    onclick="cancel('{{ fact.pk }}')">
+                                    onclick="pickDate('{{ fact.pk }}')">
                                 Cancelar
                             </button>
                         </th>
@@ -67,19 +67,43 @@
         {{ cancelForm }}
     </form>
 
+    <div class="popup" id="popup">
+        <label for="cancel_date">Fecha de Cancelación</label>
+        <input type="text" id="cancel_date" placeholder="Fecha" value=""
+               readonly>
+        <br>
+        <input type="hidden" id="pk-holder">
+        <button onclick="cancel()" style="float: left">Listo</button>
+        <button onclick="document.getElementById('popup').style.display = 'none'"
+                style="float: right">Cancelar
+        </button>
+    </div>
+
 {% endblock %}
 
 {% block js %}
     <script>
-        function cancel(pk) {
+        function pickDate(pk) {
+            document.getElementById('pk-holder').value = pk;
+            document.getElementById('cancel_date').value = '';
+            document.getElementById('popup').style.display = 'block';
+        }
+
+        function cancel() {
+            var date = document.getElementById("cancel_date").value;
             var f = document.forms['cancel-form'];
+            var pk = document.getElementById('pk-holder').value;
             var amount = document.getElementById('id_amount').value;
             var year = document.getElementById('id_year').value;
             var month = document.getElementById('id_month').value;
+            if (!date) {
+                return;
+            }
             f.getElementsByClassName('pk')[0].value = pk;
             f.getElementsByClassName('amount')[0].value = amount;
             f.getElementsByClassName('year')[0].value = year;
             f.getElementsByClassName('month')[0].value = month;
+            f.getElementsByClassName('cancel_date')[0].value = date;
             f.submit();
         }
     </script>

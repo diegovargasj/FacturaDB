@@ -35,8 +35,9 @@ def search(request):
 				if cancelForm.is_valid():
 					pk = cancelForm.cleaned_data['pk']
 					f = Factura.objects.get(pk=pk)
-					cancelInvoice(f)
-					make_payment_bill(os.path.join(f.path, paid_dir), [f.num], cancelForm.cleaned_data['date'])
+					date = cancelForm.cleaned_data['cancel_date']
+					cancelInvoice(f, date)
+					make_payment_bill(f.path, [f.num], date)
 					if cancelForm.cleaned_data['amount']:
 						amount = int(
 							form.cleaned_data['amount'].replace(".", ""))
@@ -96,16 +97,16 @@ def search_accum(request):
 	form = SearchForm()
 	groups = []
 	if request.method == "POST":
-		if 'cancel-path' in request.POST:
+		if 'cancel-pk' in request.POST:
 			nums = []
+			date = datetime.datetime.strptime(request.POST['cancel_date'], '%m/%d/%Y')
 			for pk in request.POST.getlist('cancel-pk'):
 				f = Factura.objects.get(pk=pk)
-				cancelInvoice(f, request.POST['date'])
+				cancelInvoice(f, date)
 				nums.append(f.num)
 
 			make_payment_bill(
-				os.path.join(request.POST.getlist('cancel-pk')[0].path,
-				             paid_dir), nums, request.POST['date'])
+				request.POST.getlist('cancel-pk')[0].path, nums, date)
 
 		if 'update' in request.POST and not updating:
 			updatin = True
@@ -159,11 +160,14 @@ def update(root=''):
 	new_dir = os.path.join(MEDIA_ROOT, root)
 	for dir in os.listdir(new_dir):
 		null_dir_list = ['OSORNO', 'anuladas', '00.2014',
-				'00.2015', '00.2016', '00.2017', 'Thumbs.db',
-				'install', '32_64']
+		                 '00.2015', '00.2016', '00.2017', 'Thumbs.db',
+		                 'install', '32_64']
 		extn = dir.split('.')[-1]
-		if dir in null_dir_list or extn == 'msg' \
-		or extn == 'bmp' or extn == 'xlsx':
+		year = datetime.datetime.now().year
+		if extn == 'msg' or extn == 'bmp' or extn == 'xlsx':
+			continue
+
+		if not (str(year) in dir or str(year - 1) in dir):
 			continue
 
 		if dir[-4:] == '.pdf':
@@ -191,7 +195,7 @@ def add_to_db(path, fact, paid):
 		'file', flat=True)
 	if fact in model_list:
 		return
-        
+
 	rut = None
 	try:
 		pdf = PdfFileReader(open(path + '/' + fact, 'rb'))
