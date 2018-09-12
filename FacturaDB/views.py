@@ -108,7 +108,7 @@ def search_accum(request):
 				if latestF is None or latestF.fecha < f.fecha:
 					latestF = f
 
-			make_payment_bill(f.path, nums, date)
+			make_payment_bill(latestF.path, nums, date)
 
 		if 'update' in request.POST and not updating:
 			updatin = True
