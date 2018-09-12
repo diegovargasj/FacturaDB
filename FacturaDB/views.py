@@ -100,13 +100,15 @@ def search_accum(request):
 		if 'cancel-pk' in request.POST:
 			nums = []
 			date = datetime.datetime.strptime(request.POST['cancel_date'], '%m/%d/%Y')
+			latestF = None
 			for pk in request.POST.getlist('cancel-pk'):
 				f = Factura.objects.get(pk=pk)
 				cancelInvoice(f, date)
 				nums.append(f.num)
+				if latestF is None or latestF.fecha < f.fecha:
+					latestF = f
 
-			make_payment_bill(
-				request.POST.getlist('cancel-pk')[0].path, nums, date)
+			make_payment_bill(f.path, nums, date)
 
 		if 'update' in request.POST and not updating:
 			updatin = True
@@ -115,7 +117,7 @@ def search_accum(request):
 
 		else:
 			form = SearchForm(request.POST)
-			if form.is_valid():
+			if form.is_valid() and form.cleaned_data['amount']:
 				amount = int(form.cleaned_data['amount'] \
 				             .replace(".", "").replace(",", ""))
 				for client in Client.objects.all():
