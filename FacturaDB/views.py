@@ -199,6 +199,8 @@ def add_to_db(path, fact, paid):
 		return
 
 	rut = None
+	newFact = None
+	text = None
 	try:
 		pdf = PdfFileReader(open(path + '/' + fact, 'rb'))
 		page = pdf.getPage(0)
